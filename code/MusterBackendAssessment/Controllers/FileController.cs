@@ -15,6 +15,8 @@ namespace MusterBackendAssessment.Controllers
     [ApiController]
     public class FileController : ControllerBase
     {
+        private IEnumerable<string> strResult;
+
         // public async Task<IActionResult> Flatten(IFormFile file) 
         //         {
 
@@ -44,53 +46,51 @@ namespace MusterBackendAssessment.Controllers
             {
                 if (CheckIfFileIsValid(file))
                 {
-                    using (StreamReader sr = new StreamReader((Stream)file))
-                    {
-                        string strResult = await sr.ReadToEndAsync();
-                        string[] results = strResult.Split(Environment.NewLine.ToArray(),StringSplitOptions.RemoveEmptyEntries);
-                    }
+                        var str = await ReadAsStringAsync(file);
+                        string[] result = str.Split(Environment.NewLine.ToArray()
+                            ,StringSplitOptions.RemoveEmptyEntries
+                            );
 
-                    List<string[]> matrixArray = new List<string[]>();
-                    foreach (string result in results)
-                    {
-                        matrixArray.Add(result.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
-                    }
+                        char[,] matrixArray = new char[result.GetLength(0), result.GetLength(1)]; 
+                         //Create a matrix array that is the same length as the file array
 
-                    int iColumnNumber = 0;
-                    int iRowNumber = 0;
-
-                    iColumnNumber = 3;
-                    iRowNumber = 3;
                     
+                            for (int rowIndex = 0; 
+                             rowIndex <= (matrixArray.GetUpperBound(0)); rowIndex++)
+                             //Iterate through the horizontal rows of the two dimensional array
+                            {
 
-                        //     for (int rowIndex = 0; 
-                        //     rowIndex <= (matrixArray.GetUpperBound(0)); rowIndex++)
-                        // {
+                                for (int colIndex = 0; 
+                                colIndex <= (matrixArray.GetUpperBound(1) / 2); colIndex++)
+                                //Iterate throught the vertical rows, to add more dimensions add another for loop for z
+                                {
+                                    int tempHolder = matrixArray[rowIndex, colIndex];                        
+                                    matrixArray[rowIndex, colIndex] = 
+                                    matrixArray[rowIndex, matrixArray.GetUpperBound(1) - colIndex];   
+                                    matrixArray[rowIndex, matrixArray.GetUpperBound(1) - colIndex] =
+                                    (char)tempHolder;      
+                                }
+                            }
+                            Console.WriteLine(matrixArray);
 
-                        //     for (int colIndex = 0; 
-                        //     colIndex <= (matrixArray.GetUpperBound(1) / 2); colIndex++)
-                        //     {
-                        //         int tempHolder = matrixArray[rowIndex, colIndex];                        
-                        //         matrixArray[rowIndex, colIndex] = 
-                        //         matrixArray[rowIndex, matrixArray.GetUpperBound(1) - colIndex];   
-                        //         matrixArray[rowIndex, matrixArray.GetUpperBound(1) - colIndex] = 
-                        //         tempHolder;      
-                        //     }
-                        // }
-                        // {
-                        //     char[,] result = new char[file.GetLength(0), file.GetLength(1)]; 
-                        //     //Create a result array that is the same length as the file array
-                        //     for (int x = 0; x < file.GetLength(0); ++x) //Iterate through the horizontal rows of the two dimensional array
-                        //     {
-                        //         for (int y = 0; y < file.GetLength(1); ++y) //Iterate throught the vertical rows, to add more dimensions add another for loop for z
-                        //         {
-                        //             result[x, y] = file[x, y]; //Change result x,y to file x,y
-                        //         }
-                        //     }
-                        //     return result;
-        
-                        // }
-                        // return Ok(str);
+                        return Ok(matrixArray);
+
+
+
+                    // List<string[]> matrixArray = new List<string[]>();
+                    // foreach (char result in str)
+                    // {
+                    //     matrixArray.Add(result.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                    // }
+
+                    // return Ok(matrixArray);
+
+                    // int iColumnNumber = 0;
+                    // int iRowNumber = 0;
+
+                    // iColumnNumber = 3;
+                    // iRowNumber = 3;
+                    
 
                 }
                     else
@@ -102,7 +102,7 @@ namespace MusterBackendAssessment.Controllers
             {
                 return BadRequest(ex.Message);
             }
-         }
+        }
 
         /// <summary>
         /// Return the matrix as a string in matrix format. Please note that this endpoint does not check the validity of
