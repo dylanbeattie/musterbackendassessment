@@ -1,0 +1,28 @@
+Echo test
+1,2,3
+4,5,6
+7,8,9
+
+Invert test
+1,4,7
+2,5,8
+3,6,9
+ 
+3. Flatten
+    - Return the matrix as a 1 line string, with values separated by commas.
+    ```
+    // Expected output
+    1,2,3,4,5,6,7,8,9
+    ``` 
+4. Sum
+    - Return the sum of the integers in the matrix
+    ```
+    // Expected output
+    45
+    ``` 
+5. Multiply
+    - Return the product of the integers in the matrix
+    ```
+    // Expected output
+    362880
+    ``` 
