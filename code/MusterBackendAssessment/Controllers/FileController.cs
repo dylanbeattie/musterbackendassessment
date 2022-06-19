@@ -15,20 +15,88 @@ namespace MusterBackendAssessment.Controllers
     [ApiController]
     public class FileController : ControllerBase
     {
-        private IEnumerable<string> strResult;
+        // [AllowAnonymous]
+        // [HttpPost("flatten")]
+        // [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        // [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
 
         // public async Task<IActionResult> Flatten(IFormFile file) 
         //         {
+        //             try
+        //             {
+        //                 if (CheckIfFileIsValid(file))
+        //                 {
+        //                     var str = await ReadAsStringAsync(file);
+                            //write logic here
+        //                     return Ok(str);
+        //                 }
+        //                 else
+        //                 {
+        //                     return BadRequest("Invalid file format, please enter a .csv file");
+        //                 }
+        //             }
+        //             catch (Exception ex)
+        //             {
+        //                 return BadRequest(ex.Message);
+        //             }
 
         //         }
+
+        // [AllowAnonymous]
+        // [HttpPost("sum")]
+        // [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        // [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+
         // public async Task<IActionResult> Sum(IFormFile file) 
         // {
+        //     try
+            // {
+                // if (CheckIfFileIsValid(file))
+                // {
+                //     var str = await ReadAsStringAsync(file);
+                //Write logic here
+                //     return Ok(str);
+                // }
+                // else
+                // {
+                //     return BadRequest("Invalid file format, please enter a .csv file");
+                // }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return BadRequest(ex.Message);
+        //     }
 
         // }
+
+        // [AllowAnonymous]
+        // [HttpPost("multiply")]
+        // [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        // [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+
         // public async Task<IActionResult> Multiply(IFormFile file) 
         // {
+        //     try
+        //     {
+                // if (CheckIfFileIsValid(file))
+                // {
+                //     var str = await ReadAsStringAsync(file);
+                //write logic here
+                //     return Ok(str);
+                // }
+                // else
+                // {
+                //     return BadRequest("Invalid file format, please enter a .csv file");
+                // }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return BadRequest(ex.Message);
+        //     }
 
         // }
+        private IEnumerable<string> strResult;
+
         /// <summary>
         /// Return the matrix as a string in matrix format where the columns and rows are inverted. 
         /// </summary>
@@ -41,15 +109,27 @@ namespace MusterBackendAssessment.Controllers
 
         public async Task<IActionResult> Invert(IFormFile file) 
         {
+            
             // Console.WriteLine("Hello World");
             try
             {
                 if (CheckIfFileIsValid(file))
                 {
                         var str = await ReadAsStringAsync(file);
-                        string[] result = str.Split(Environment.NewLine.ToArray()
+                        string[] result = str.Split(Environment.NewLine.ToCharArray()
                             ,StringSplitOptions.RemoveEmptyEntries
                             );
+
+                        // foreach (char item in str)
+                        // {
+                        //     result.Add(str.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                        // }
+
+                    // foreach (char result in str)
+                    // {
+                    //     matrixArray.Add(result.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                    // }
+
 
                         char[,] matrixArray = new char[result.GetLength(0), result.GetLength(1)]; 
                          //Create a matrix array that is the same length as the file array
@@ -74,8 +154,6 @@ namespace MusterBackendAssessment.Controllers
                             Console.WriteLine(matrixArray);
 
                         return Ok(matrixArray);
-
-
 
                     // List<string[]> matrixArray = new List<string[]>();
                     // foreach (char result in str)
