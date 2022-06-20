@@ -9,12 +9,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusterBackendAssessment.Controllers
-{
+namespace MusterBackendAssessment.Controllers {
     [Route("/")]
     [ApiController]
-    public class FileController : ControllerBase
-    {
+    public class FileController : ControllerBase {
         // [AllowAnonymous]
         // [HttpPost("flatten")]
         // [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -27,7 +25,10 @@ namespace MusterBackendAssessment.Controllers
         //                 if (CheckIfFileIsValid(file))
         //                 {
         //                     var str = await ReadAsStringAsync(file);
-                            //write logic here
+        //write logic here
+                                var matrix = Matrix.Parse(str);
+                                var flat = matrix.Flatten();
+                                return Ok(flat.ToString());
         //                     return Ok(str);
         //                 }
         //                 else
@@ -50,17 +51,17 @@ namespace MusterBackendAssessment.Controllers
         // public async Task<IActionResult> Sum(IFormFile file) 
         // {
         //     try
-            // {
-                // if (CheckIfFileIsValid(file))
-                // {
-                //     var str = await ReadAsStringAsync(file);
-                //Write logic here
-                //     return Ok(str);
-                // }
-                // else
-                // {
-                //     return BadRequest("Invalid file format, please enter a .csv file");
-                // }
+        // {
+        // if (CheckIfFileIsValid(file))
+        // {
+        //     var str = await ReadAsStringAsync(file);
+        //Write logic here
+        //     return Ok(str);
+        // }
+        // else
+        // {
+        //     return BadRequest("Invalid file format, please enter a .csv file");
+        // }
         //     }
         //     catch (Exception ex)
         //     {
@@ -78,16 +79,16 @@ namespace MusterBackendAssessment.Controllers
         // {
         //     try
         //     {
-                // if (CheckIfFileIsValid(file))
-                // {
-                //     var str = await ReadAsStringAsync(file);
-                //write logic here
-                //     return Ok(str);
-                // }
-                // else
-                // {
-                //     return BadRequest("Invalid file format, please enter a .csv file");
-                // }
+        // if (CheckIfFileIsValid(file))
+        // {
+        //     var str = await ReadAsStringAsync(file);
+        //write logic here
+        //     return Ok(str);
+        // }
+        // else
+        // {
+        //     return BadRequest("Invalid file format, please enter a .csv file");
+        // }
         //     }
         //     catch (Exception ex)
         //     {
@@ -107,77 +108,21 @@ namespace MusterBackendAssessment.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
 
-        public async Task<IActionResult> Invert(IFormFile file) 
-        {
-            
-            // Console.WriteLine("Hello World");
-            try
-            {
-                if (CheckIfFileIsValid(file))
-                {
-                        var str = await ReadAsStringAsync(file);
-                        string[] result = str.Split(Environment.NewLine.ToCharArray()
-                            ,StringSplitOptions.RemoveEmptyEntries
-                            );
-
-                        // foreach (char item in str)
-                        // {
-                        //     result.Add(str.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
-                        // }
-
-                    // foreach (char result in str)
-                    // {
-                    //     matrixArray.Add(result.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
-                    // }
-
-
-                        char[,] matrixArray = new char[result.GetLength(0), result.GetLength(1)]; 
-                         //Create a matrix array that is the same length as the file array
-
-                    
-                            for (int rowIndex = 0; 
-                             rowIndex <= (matrixArray.GetUpperBound(0)); rowIndex++)
-                             //Iterate through the horizontal rows of the two dimensional array
-                            {
-
-                                for (int colIndex = 0; 
-                                colIndex <= (matrixArray.GetUpperBound(1) / 2); colIndex++)
-                                //Iterate throught the vertical rows, to add more dimensions add another for loop for z
-                                {
-                                    int tempHolder = matrixArray[rowIndex, colIndex];                        
-                                    matrixArray[rowIndex, colIndex] = 
-                                    matrixArray[rowIndex, matrixArray.GetUpperBound(1) - colIndex];   
-                                    matrixArray[rowIndex, matrixArray.GetUpperBound(1) - colIndex] =
-                                    (char)tempHolder;      
-                                }
-                            }
-                            Console.WriteLine(matrixArray);
-
-                        return Ok(matrixArray);
-
-                    // List<string[]> matrixArray = new List<string[]>();
-                    // foreach (char result in str)
-                    // {
-                    //     matrixArray.Add(result.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
-                    // }
-
-                    // return Ok(matrixArray);
-
-                    // int iColumnNumber = 0;
-                    // int iRowNumber = 0;
-
-                    // iColumnNumber = 3;
-                    // iRowNumber = 3;
-                    
-
-                }
-                    else
-                {
+        public async Task<IActionResult> Invert(IFormFile file) {
+            try {
+                if (CheckIfFileIsValid(file)) {
+                    var inputString = await ReadAsStringAsync(file);
+                    var matrix = Matrix.parse(str);
+                    var inverse = matrix.Invert();
+                    var result = inverse.ToString();
+                    // var matrix = stringToMatrix(inputString);
+                    // var inverted = invertMatrix(matrix);
+                    // var result = matrixToString(inverted);
+                    return Ok(result);
+                } else {
                     return BadRequest("Invalid file format, please enter a .csv file");
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 return BadRequest(ex.Message);
             }
         }
@@ -192,72 +137,75 @@ namespace MusterBackendAssessment.Controllers
         [HttpPost("echo")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Echo(IFormFile file) 
-        {
-            try
-            {
-                if (CheckIfFileIsValid(file))
-                {
+        public async Task<IActionResult> Echo(IFormFile file) {
+            try {
+                if (CheckIfFileIsValid(file)) {
                     var str = await ReadAsStringAsync(file);
                     return Ok(str);
-                }
-                else
-                {
+                } else {
                     return BadRequest("Invalid file format, please enter a .csv file");
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 return BadRequest(ex.Message);
             }
         }
 
-       
-       
+
+
 
         /// <summary>
         /// Reads the content of the file into a string variable 
         /// </summary>
         /// <param name="file">The file to be read</param>
         /// <returns>A string whose value is the content of the file</returns>
-        public static async Task<string> ReadAsStringAsync( IFormFile file)
-        {
-            try
-            {
-                if (file == null || file.Length == 0)
-                {
-                    return await Task.FromResult((string)null);
-                }
-
-                using (var reader = new StreamReader(file.OpenReadStream()))
-                {
-                    return await reader.ReadToEndAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
+        public static async Task<string> ReadAsStringAsync(IFormFile file) {
+            if (file == null || file.Length == 0) return null;
+            using (var reader = new StreamReader(file.OpenReadStream())) {
+                return await reader.ReadToEndAsync();
             }
         }
+
 
         /// <summary>
         /// Checks if the file is not null and has a valid extension
         /// </summary>
         /// <param name="file">The file to be checked </param>
         /// <returns>A boolean for whether the file is valid or otherwise </returns>
-        private bool CheckIfFileIsValid(IFormFile file)
-        {
+        private bool CheckIfFileIsValid(IFormFile file) {
             if (file == null) //Break if file is null
             {
                 throw new FileNotFoundException("File cannot be null, please upload a file");
-            }
-            else
-            {
+            } else {
                 var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
                 return extension == ".csv";
             }
-           
+
         }
 
+        private int[,] stringToMatrix(string input) {
+            /* TODO: turn input string "1,2,3\n4,5,6\n7,8,9" into
+            a 2D array [ 
+                1, 2, 3,
+                4, 5, 6,
+                7, 8, 9
+            ]
+            */
+            return new int[,] { 
+                { 11, 22, 33 },
+                { 44, 55, 66 },
+                { 77, 88, 99 }
+            };
+        }
+
+        private int[,] invertMatrix(int[,] matrix) {
+            return new int[,] { 
+                { 111, 222, 333 },
+                { 444, 555, 666 },
+                { 777, 888, 999 }
+            };
+        }
+        private string matrixToString(int[,] matrix) {
+            return "Hello!";
+        }
     }
 }
