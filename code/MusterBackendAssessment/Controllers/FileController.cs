@@ -25,10 +25,10 @@ namespace MusterBackendAssessment.Controllers {
         //                 if (CheckIfFileIsValid(file))
         //                 {
         //                     var str = await ReadAsStringAsync(file);
-        //write logic here
-                                var matrix = Matrix.Parse(str);
-                                var flat = matrix.Flatten();
-                                return Ok(flat.ToString());
+        // //write logic here
+        //                         var matrix = Matrix.Parse(str);
+        //                         var flat = matrix.Flatten();
+        //                         return Ok(flat.ToString());
         //                     return Ok(str);
         //                 }
         //                 else
@@ -111,14 +111,14 @@ namespace MusterBackendAssessment.Controllers {
         public async Task<IActionResult> Invert(IFormFile file) {
             try {
                 if (CheckIfFileIsValid(file)) {
-                    var inputString = await ReadAsStringAsync(file);
-                    var matrix = Matrix.parse(str);
-                    var inverse = matrix.Invert();
-                    var result = inverse.ToString();
+                    // var inputString = await ReadAsStringAsync(file);
+                    // var matrix = Matrix.parse(str);
+                    // var inverse = matrix.Invert();
+                    // var result = inverse.ToString();
                     // var matrix = stringToMatrix(inputString);
                     // var inverted = invertMatrix(matrix);
                     // var result = matrixToString(inverted);
-                    return Ok(result);
+                    return Ok();
                 } else {
                     return BadRequest("Invalid file format, please enter a .csv file");
                 }
