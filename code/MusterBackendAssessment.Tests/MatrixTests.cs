@@ -33,4 +33,11 @@ public class MatrixTests {
         var output = matrix.ToString();
         output.ShouldBe(input);
     }
+
+    [Fact]
+    public void One_Equals_One() {
+        var input = 1;
+        var expected = 1;
+        input.ShouldBe(expected);
+    }
 }
